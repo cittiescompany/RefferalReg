@@ -90,14 +90,14 @@ export default function AccountSetupForm() {
       `/register/complete_registration`,
       dataValue
     );
-    console.log(res.data.status);
     if (res.data.status) {
+      setisLoading(false);
       toast.success(res.data.message || "Account setup is successful");
       handleSearchParams("lagos Account setup is successful", "is_success");
       form.reset();
-    }else{
-        toast.error( res.data.message || "Account setup is successful");
-
+    } else {
+      toast.error(res.data.message || "Account setup is successful");
+      setisLoading(false);
     }
   };
 
