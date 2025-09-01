@@ -24,33 +24,42 @@ import useFormHook from "@/hooks/use-form-hook";
 import { useEffect, useState } from "react";
 import { Loader } from "lucide-react";
 import useParamHook from "@/hooks/use-param-hook";
+import clientApi from "@/lib/clientApi";
+import { toast } from "react-toastify";
 
 const formSchema = z.object({
   identity: z.string().nonempty("User identity is required"),
   country: z.string().nonempty("Country is required"),
   state: z.string().nonempty("State is required"),
   city: z.string().nonempty("City is required"),
-  social_media: z.string().nonempty("Social media handle is required"),
-  user_name: z.string().nonempty("Username is required"),
+  social_media: z
+    .string()
+    .nonempty("Social media handle is required")
+    .optional(),
+  user_name: z
+    .string()
+    .nonempty("Username is required")
+    .regex(/^\S+$/, "Username cannot contain spaces"),
   social_media_username: z
     .string()
-    .nonempty("Social media username is required"),
+    .nonempty("Social media username is required")
+    .optional(),
 });
 
 export default function AccountSetupForm() {
   const [isLoading, setisLoading] = useState<boolean>(false);
-  const {otpEmail} = useFormHook();
-  const {handleSearchParams} = useParamHook();
+  const { otpPhoneNumber } = useFormHook();
+  const { handleSearchParams } = useParamHook();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      identity: otpEmail || "",
-      country: "Nigeria",
+      identity: otpPhoneNumber || "",
       state: "",
+      country: "Nigeria",
       city: "",
       social_media: "",
-      user_name: "",
       social_media_username: "",
+      user_name: "",
     },
   });
 
@@ -63,14 +72,33 @@ export default function AccountSetupForm() {
   console.log(form.getValues("state"));
 
   useEffect(() => {
+    if (otpPhoneNumber) {
+      form.setValue("identity", otpPhoneNumber);
+    }
     const code = form.getValues("state");
-    handleSearchParams("lagos nigeria emmolly", "is_success");
     handleGetCities(code);
   }, [form.watch("state")]);
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setisLoading(true);
-    console.log("Form Data:", values);
+    const stateName = states.find((v) => v.stateCode === values.state);
+    const dataValue = {
+      ...values,
+      state: stateName?.name,
+    };
+    const res = await clientApi.post(
+      `/register/complete_registration`,
+      dataValue
+    );
+    console.log(res.data.status);
+    if (res.data.status) {
+      toast.success(res.data.message || "Account setup is successful");
+      handleSearchParams("lagos Account setup is successful", "is_success");
+      form.reset();
+    }else{
+        toast.error( res.data.message || "Account setup is successful");
+
+    }
   };
 
   return (
@@ -146,9 +174,6 @@ export default function AccountSetupForm() {
                         {city.name}
                       </SelectItem>
                     ))}
-                    <SelectItem value="amuwo">Amuwo Odofin</SelectItem>
-                    <SelectItem value="ikeja">Ikeja</SelectItem>
-                    <SelectItem value="lekki">Lekki</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -192,7 +217,7 @@ export default function AccountSetupForm() {
                   <Input
                     {...field}
                     className="h-11 w-full py-6"
-                    placeholder="John doe"
+                    placeholder="John"
                   />
                 </FormControl>
                 <FormMessage />

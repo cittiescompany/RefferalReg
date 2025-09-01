@@ -12,10 +12,10 @@ export const userFormSchema = z.object({
   email: z.string().email(),
   gender: z.enum(["male", "female", "other"]),
   date_of_birth: z.date(),
-  // reffer_by: z
-  //   .string()
-  //   .min(2, { message: "Referral code is required" })
-  //   .optional(),
+  reffer_by: z
+    .string()
+    .min(2, { message: "Referral code is required" })
+    .optional(),
   country_code: z.string().min(1, { message: "Country code is required" }),
   phone_number: z
     .string()

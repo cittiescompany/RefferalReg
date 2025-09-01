@@ -15,7 +15,7 @@ const OtpScreen = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [msg, setMsg] = useState<string>("");
   const {router} = useParamHook();
-  const {otpEmail} = useFormHook();
+  const {otpEmail, otpPhoneNumber} = useFormHook();
   
   const handleChange = (value: string) => {
     setOtp(value);
@@ -34,7 +34,7 @@ const OtpScreen = () => {
     const otpData = Number(otp);
 
     const data = {
-      identity: otpEmail,
+      identity: otpPhoneNumber,
       otp: String(otpData),
     };
     

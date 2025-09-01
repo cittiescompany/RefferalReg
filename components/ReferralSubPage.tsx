@@ -51,7 +51,7 @@ const ReferralSubPage = () => {
       last_name: "",
       email: "",
       pin: "",
-      // reffer_by: referralCode || "",
+      reffer_by: referralCode || "",
       country_code: "",
       date_of_birth: new Date(),
       phone_number: "",
@@ -66,9 +66,9 @@ const ReferralSubPage = () => {
 
     const res = await clientApi.post(`/register/individual`, rawData);
 
-    if (res.status) {
+    if (res.data.status) {
       toast.success("✅ User registered successfully!");
-      window.localStorage.setItem("userEmail", data.email);
+      window.localStorage.setItem("userPhoneNumber", data.phone_number);
       setTimeout(() => {
         router.push("/otp"); 
         setLoading(false);

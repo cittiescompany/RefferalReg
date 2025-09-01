@@ -36,16 +36,19 @@ const useFormHook = ({ cc = "NG", sc }: UseFormHookProps = {}) => {
   const [states, setStates] = useState<StateProps[]>([]);
   const [cities, setCities] = useState<CityProps[]>([]);
   const [otpEmail, setOtpEmail] = useState<string | null | undefined>(undefined);
+  const [otpPhoneNumber, setOtpPhoneNumber] = useState<string | null | undefined>(undefined);
 
 
   
   useEffect(() => {
     const storedEmail = window.localStorage.getItem("userEmail");
-    console.log(storedEmail);
+    const storedPhoneNumber = window.localStorage.getItem("userPhoneNumber");
+    setOtpPhoneNumber(storedPhoneNumber);
+    // console.log(storedEmail);
+    setOtpEmail(storedPhoneNumber);
     
     // const userEmail = storedEmail ? JSON.parse(storedEmail) : "";
     // console.log(userEmail);
-    setOtpEmail(storedEmail);
   }, []);
 
   // Fetch all countries
@@ -101,6 +104,7 @@ const useFormHook = ({ cc = "NG", sc }: UseFormHookProps = {}) => {
     cities,
     handleGetCities,
     otpEmail,
+    otpPhoneNumber,
   };
 };
 
