@@ -47,7 +47,7 @@ const BusinessSubPage = () => {
       business_name: "",
       business_sector: "",
       email: "",
-      password: Number(''),
+      password: "",
       country_code: "",
       phone_number: "",
     },

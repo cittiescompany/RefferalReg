@@ -1,13 +1,10 @@
 "use client";
 
-import useParamHook from "@/hooks/use-param-hook";
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import ReferralSubPage from "./ReferralSubPage";
-import BusinessSubPage from "./BusinessSubPage";
 import { motion, AnimatePresence } from "framer-motion";
 
 const RegistrationMainPage = () => {
-  const { mode } = useParamHook({ key: "reg_type" });
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [direction, setDirection] = useState<number>(1);
 
@@ -38,7 +35,9 @@ const RegistrationMainPage = () => {
         animate="animate"
         exit="exit"
       >
-         <ReferralSubPage />
+        <Suspense fallback={null}>
+          <ReferralSubPage />
+        </Suspense>
       </motion.div>
     </AnimatePresence>
   );

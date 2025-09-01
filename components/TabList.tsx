@@ -1,16 +1,11 @@
 "use client";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import useParamHook from "@/hooks/use-param-hook";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const TabList = () => {
   const [active, setActive] = useState<string>("individual");
-  const { handleSearchParams, mode } = useParamHook({key: "reg_type"});
 
-  useEffect(() => {
-    handleSearchParams(active, "reg_type");
-  }, [active]);
 
   return (
     <div className="border w-full" >
