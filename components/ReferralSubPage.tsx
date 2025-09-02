@@ -34,6 +34,8 @@ import CountrySelect from "./CountrySelect";
 import useParamHook from "@/hooks/use-param-hook";
 import { toast } from "react-toastify";
 import useFormHook from "@/hooks/use-form-hook";
+import { PiEyeSlashThin } from "react-icons/pi";
+import { PiEyeThin } from "react-icons/pi";
 
 export type userSchemaProps = z.infer<typeof userFormSchema>;
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -41,9 +43,10 @@ const ReferralSubPage = () => {
   const params = useSearchParams();
   const referralCode = params.get("ref") || "ABC123";
   const [loading, setLoading] = useState(false);
+  const [passwordType, setPasswordType] = useState("password");
   const [month, setMonth] = useState<Date>(new Date());
   const { router } = useParamHook();
-  const {countries} = useFormHook({cc: "NG", sc: ""});
+  const { countries } = useFormHook({ cc: "NG", sc: "" });
   const form = useForm<userSchemaProps>({
     resolver: zodResolver(userFormSchema),
     defaultValues: {
@@ -58,32 +61,31 @@ const ReferralSubPage = () => {
     },
   });
 
- const onSubmit = async (data: userSchemaProps) => {
-  try {
-    setLoading(true);
-    const rawData = {...data, phone_number: Number(data.phone_number)};
-    console.log(rawData); 
+  const onSubmit = async (data: userSchemaProps) => {
+    try {
+      setLoading(true);
+      const rawData = { ...data, phone_number: Number(data.phone_number) };
+      console.log(rawData);
 
-    const res = await clientApi.post(`/register/individual`, rawData);
+      const res = await clientApi.post(`/register/individual`, rawData);
 
-    if (res.data.status) {
-      toast.success("✅ User registered successfully!");
-      window.localStorage.setItem("userPhoneNumber", data.phone_number);
-      setTimeout(() => {
-        router.push("/otp"); 
-        setLoading(false);
-        form.reset();
-      }, 2000);
+      setLoading(false);
+      if (res.data.status) {
+        toast.success("✅ User registered successfully!");
+        window.localStorage.setItem("userPhoneNumber", data.phone_number);
+        setTimeout(() => {
+          router.push("/otp");
+          form.reset();
+        }, 2000);
 
-      console.log(res.data); 
+        console.log(res.data);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("❌ Registration failed. Please try again.");
+      setLoading(false);
     }
-  } catch (err) {
-    console.error(err);
-    toast.error("❌ Registration failed. Please try again.");
-    setLoading(false);
-  }
-};
-
+  };
 
   return (
     <div className="max-w-lg mx-auto mt-3 p-6 bg-white rounded-2xl shadow">
@@ -135,19 +137,7 @@ const ReferralSubPage = () => {
               </FormItem>
             )}
           />
-          {/* <FormField
-            control={form.control}
-            name="country_code"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Country code </FormLabel>
-                <FormControl>
-                  <Input className="h-11" placeholder="+234" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          /> */}
+
           <FormField
             control={form.control}
             name="phone_number"
@@ -241,9 +231,27 @@ const ReferralSubPage = () => {
             name="pin"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel className="flext justify-between">
+                  Password{" "}
+                  <button
+                    onClick={() => {
+                      passwordType === "password"
+                        ? setPasswordType("text")
+                        : setPasswordType("password");
+                    }}
+                    className="text cursor-pointer  "
+                  >
+                    {passwordType === 'password'? <span className="text flex items-center gap-1"><PiEyeThin size={20} /> Show</span> : <span className="text flex items-center gap-1"><PiEyeSlashThin size={20} /> Hide</span> }
+                    
+                  </button>{" "}
+                </FormLabel>
                 <FormControl>
-                  <Input className="h-11" placeholder="••••••••" {...field} />
+                  <Input
+                    className="h-11"
+                    type={passwordType}
+                    placeholder="••••••••"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
