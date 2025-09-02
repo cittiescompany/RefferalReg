@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-// ShadCN form components
 import {
   Form,
   FormControl,
@@ -12,9 +11,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { userFormSchema } from "@/lib/formSchemas";
 import clientApi from "@/lib/clientApi";
@@ -33,12 +32,10 @@ import { CalendarIcon, Loader } from "lucide-react";
 import CountrySelect from "./CountrySelect";
 import useParamHook from "@/hooks/use-param-hook";
 import { toast } from "react-toastify";
-import useFormHook from "@/hooks/use-form-hook";
 import { PiEyeSlashThin } from "react-icons/pi";
 import { PiEyeThin } from "react-icons/pi";
 
 export type userSchemaProps = z.infer<typeof userFormSchema>;
-const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 const ReferralSubPage = () => {
   const params = useSearchParams();
   const referralCode = params.get("ref") || "ABC123";
@@ -46,7 +43,6 @@ const ReferralSubPage = () => {
   const [passwordType, setPasswordType] = useState("password");
   const [month, setMonth] = useState<Date>(new Date());
   const { router } = useParamHook();
-  const { countries } = useFormHook({ cc: "NG", sc: "" });
   const form = useForm<userSchemaProps>({
     resolver: zodResolver(userFormSchema),
     defaultValues: {
@@ -241,8 +237,15 @@ const ReferralSubPage = () => {
                     }}
                     className="text cursor-pointer  "
                   >
-                    {passwordType === 'password'? <span className="text flex items-center gap-1"><PiEyeThin size={20} /> Show</span> : <span className="text flex items-center gap-1"><PiEyeSlashThin size={20} /> Hide</span> }
-                    
+                    {passwordType === "password" ? (
+                      <span className="text flex items-center gap-1">
+                        <PiEyeThin size={20} /> Show
+                      </span>
+                    ) : (
+                      <span className="text flex items-center gap-1">
+                        <PiEyeSlashThin size={20} /> Hide
+                      </span>
+                    )}
                   </button>{" "}
                 </FormLabel>
                 <FormControl>

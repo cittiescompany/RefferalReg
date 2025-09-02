@@ -77,7 +77,7 @@ export default function AccountSetupForm() {
     }
     const code = form.getValues("state");
     handleGetCities(code);
-  }, [form.watch("state")]);
+  }, [form.watch("state"), form, otpPhoneNumber, handleGetCities]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setisLoading(true);

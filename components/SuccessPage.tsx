@@ -2,12 +2,9 @@
 
 import { CheckCircle2 } from "lucide-react";
 import React from "react";
-import { Button } from "./ui/button";
-import useParamHook from "@/hooks/use-param-hook";
 import StoreButtons from "./StoreButtons";
 
 const SuccessPage = () => {
-    const {router} = useParamHook();
   return (
     <div className="w-full bg-[#3561D3]">
       <div className="flex w-full bg-[#3561D3] items-center justify-center p-0">

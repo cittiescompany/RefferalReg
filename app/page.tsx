@@ -1,10 +1,11 @@
-import RegistrationMainPage from "@/components/RegistrationMainPage";
-import Image from "next/image";
+import RegMainPage from "@/components/RegMainPage";
 
 export default function Home() {
   return (
    <div className="text ">
-    <RegistrationMainPage/>
+   
+
+    <RegMainPage/>
    </div>
   );
 }

@@ -30,7 +30,7 @@ export default function StoreButtons() {
 
       <Dialog>
         <DialogTrigger className="w-1/2">
-          <p className="flex cursor-pointer items-center w-full justify-center gap-2 rounded-lg bg-black px-4 py-2 text-white shadow-md hover:opacity-90">
+          <div className="flex cursor-pointer items-center w-full justify-center gap-2 rounded-lg bg-black px-4 py-2 text-white shadow-md hover:opacity-90">
             <Image
               src={imgApple}
               alt="App Store"
@@ -42,7 +42,7 @@ export default function StoreButtons() {
               <span className="text-[10px]">Download on the</span>
               <span className="text-sm font-semibold">App Store</span>
             </div>
-          </p>
+          </div>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>

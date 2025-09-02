@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import OtpInput from "react-otp-input";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, Loader } from "lucide-react";
+import { Loader } from "lucide-react";
 import useParamHook from "@/hooks/use-param-hook";
 import Link from "next/link";
 import clientApi from "@/lib/clientApi";
@@ -21,14 +21,9 @@ const OtpScreen = () => {
     setOtp(value);
   };
   
- 
-
-  useEffect(() => {
-    if (otp.length === 6) {
-      handleSubmit();
-    }
-  }, [otp]);
-
+  
+  
+  
   const handleSubmit = async () => {
     setIsLoading(true);
     const otpData = Number(otp);
@@ -62,6 +57,13 @@ const OtpScreen = () => {
       setIsLoading(false);
     }, 2000);
   };
+
+  useEffect(() => {
+    if (otp.length === 6) {
+      handleSubmit();
+    }
+  }, [otp]);
+
 
   return (
     <div className=" w-full mx-auto  text-center space-y-6">

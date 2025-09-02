@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-// ShadCN form components
 import {
   Form,
   FormControl,
@@ -12,35 +11,19 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useSearchParams, useRouter } from "next/navigation";
-import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import clientApi from "@/lib/clientApi";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { CalendarIcon } from "lucide-react";
 import { businessFormSchema } from "@/lib/formSchemas";
 
 export type userSchemaProps = z.infer<typeof businessFormSchema>;
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const BusinessSubPage = () => {
-      const params = useSearchParams();
-  const referralCode = params.get("ref") || "ABC123";
-  const [loading, setLoading] = useState(false);
-  const [month, setMonth] = useState<Date>(new Date());
-  const router = useRouter();
+      // const params = useSearchParams();
+  // const referralCode = params.get("ref") || "ABC123";
+  // const [loading, setLoading] = useState(false);
   const form = useForm<userSchemaProps>({
     resolver: zodResolver(businessFormSchema),
     defaultValues: {
@@ -54,11 +37,11 @@ const BusinessSubPage = () => {
   });
 
   const onSubmit = async (data: userSchemaProps) => {
-    setLoading(true);
+    // setLoading(true);
     console.log(data);
     const res = await clientApi.post(`${baseUrl}/register/individual`, data);
     if (res.status) {
-      setLoading(false);
+      // setLoading(false);
       console.log(res);
     }
   };
