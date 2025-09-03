@@ -26,6 +26,7 @@ import { Loader } from "lucide-react";
 import useParamHook from "@/hooks/use-param-hook";
 import clientApi from "@/lib/clientApi";
 import { toast } from "react-toastify";
+import { SlSettings } from "react-icons/sl";
 
 const formSchema = z.object({
   identity: z.string().nonempty("User identity is required"),
@@ -48,8 +49,9 @@ const formSchema = z.object({
 
 export default function AccountSetupForm() {
   const [isLoading, setisLoading] = useState<boolean>(false);
-  const { otpPhoneNumber } = useFormHook();
+  const { otpPhoneNumber, otpEmail } = useFormHook();
   const { handleSearchParams } = useParamHook();
+  const [isVerified, setIsVerified] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -68,20 +70,41 @@ export default function AccountSetupForm() {
     sc: form.getValues("state"),
   });
 
- const stateCode = form.watch("state");
+  const stateCode = form.watch("state");
+console.log(isVerified);
 
-useEffect(() => {
-  if (otpPhoneNumber) {
-    form.setValue("identity", otpPhoneNumber);
-  }
-}, [otpPhoneNumber, form]);
+  useEffect(() => {
+    const data = {
+      identity: otpEmail,
+      user_name: form.watch("user_name"),
+    };
+    if (form.watch("user_name")) {
+      setIsVerified(true);
+      const response = clientApi.post(`/register/username_suggestion`, data);
+      response
+      .then((res) => {
+        toast.success(res.data.message)
+          setIsVerified(false);
+          console.log(res);
+        })
+        .catch((err) => {
+          setIsVerified(false);
+          console.log(err);
+        });
+    }
+  }, [form.watch("user_name")]);
 
-useEffect(() => {
-  if (stateCode) {
-    handleGetCities(stateCode);
-  }
-}, [stateCode]);
+  useEffect(() => {
+    if (otpPhoneNumber) {
+      form.setValue("identity", otpPhoneNumber);
+    }
+  }, [otpPhoneNumber, form]);
 
+  useEffect(() => {
+    if (stateCode) {
+      handleGetCities(stateCode);
+    }
+  }, [stateCode]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setisLoading(true);
@@ -190,7 +213,7 @@ useEffect(() => {
             name="social_media"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Social media handle</FormLabel>
+                <FormLabel>Instagram handle</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -201,8 +224,8 @@ useEffect(() => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="facebook">Facebook</SelectItem>
-                    <SelectItem value="twitter">Twitter</SelectItem>
+                    {/* <SelectItem value="facebook">Facebook</SelectItem>
+                    <SelectItem value="twitter">Twitter</SelectItem> */}
                     <SelectItem value="instagram">Instagram</SelectItem>
                   </SelectContent>
                 </Select>
@@ -216,7 +239,12 @@ useEffect(() => {
             name="user_name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel className="flex justify-between items-center mr-1">Username {isVerified && (
+                    <span className="text-blue-500 flex items-center gap-1">
+                      <SlSettings size={18} className="animate-spin" />
+                      Verifying...
+                    </span>
+                  )}</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -233,7 +261,10 @@ useEffect(() => {
             name="social_media_username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Socia media username</FormLabel>
+                <FormLabel >
+                  Socia media username{" "}
+                  
+                </FormLabel>
                 <FormControl>
                   <Input
                     {...field}

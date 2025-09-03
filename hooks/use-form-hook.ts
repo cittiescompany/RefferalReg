@@ -44,8 +44,8 @@ const useFormHook = ({ cc = "NG", sc }: UseFormHookProps = {}) => {
     const storedEmail = window.localStorage.getItem("userEmail");
     const storedPhoneNumber = window.localStorage.getItem("userPhoneNumber");
     setOtpPhoneNumber(storedPhoneNumber);
+    setOtpEmail(storedEmail);
     // console.log(storedEmail);
-    setOtpEmail(storedPhoneNumber);
     
     // const userEmail = storedEmail ? JSON.parse(storedEmail) : "";
     // console.log(userEmail);
@@ -92,7 +92,6 @@ const useFormHook = ({ cc = "NG", sc }: UseFormHookProps = {}) => {
       .get(`/states_and_coutries/cities?countryCode=${cc}&stateCode=${sc}`)
       .then((res) => {
         setCities(res.data.cities || []);
-        console.log(res);
       })
       .catch((err) => console.error("Cities fetch error:", err.message));
   };

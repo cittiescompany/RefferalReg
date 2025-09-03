@@ -66,15 +66,19 @@ const ReferralSubPage = () => {
       const res = await clientApi.post(`/register/individual`, rawData);
 
       setLoading(false);
+      console.log(res);
+      
       if (res.data.status) {
-        toast.success("✅ User registered successfully!");
+        toast.success(res.data.message || "✅ User registered successfully!");
         window.localStorage.setItem("userPhoneNumber", data.phone_number);
+        window.localStorage.setItem("userEmail", data.email);
         setTimeout(() => {
           router.push("/otp");
           form.reset();
         }, 2000);
-
-        console.log(res.data);
+      }else{
+        toast.error(res.data.message || "❌ Registration failed. Please try again.");
+        
       }
     } catch (err) {
       console.error(err);
