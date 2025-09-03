@@ -67,17 +67,21 @@ export default function AccountSetupForm() {
     cc: "NG",
     sc: form.getValues("state"),
   });
-  console.log(states);
-  console.log(cities);
-  console.log(form.getValues("state"));
 
-  useEffect(() => {
-    if (otpPhoneNumber) {
-      form.setValue("identity", otpPhoneNumber);
-    }
-    const code = form.getValues("state");
-    handleGetCities(code);
-  }, [form.watch("state"), form, otpPhoneNumber, handleGetCities]);
+ const stateCode = form.watch("state");
+
+useEffect(() => {
+  if (otpPhoneNumber) {
+    form.setValue("identity", otpPhoneNumber);
+  }
+}, [otpPhoneNumber, form]);
+
+useEffect(() => {
+  if (stateCode) {
+    handleGetCities(stateCode);
+  }
+}, [stateCode]);
+
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setisLoading(true);
